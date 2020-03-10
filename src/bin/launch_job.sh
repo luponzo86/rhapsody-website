@@ -14,13 +14,13 @@ cd $jobdir
 # check if user provided email address
 if [ -e input-email.txt ]; then
   # email=$(cat input-email.txt)
-  email="ponzoniluca@gmail.com, $(cat input-email.txt)"
+  email="lponzoni@pitt.edu, $(cat input-email.txt)"
   # prevent other emails to be sent
   echo | cat input-email.txt - >> sent_emails.txt
   rm input-email.txt
 else
   # email=""
-  email="ponzoniluca@gmail.com"
+  email="lponzoni@pitt.edu"
 fi
 
 # run rhapsody

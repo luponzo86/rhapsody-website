@@ -52,7 +52,7 @@
             Download
           </a>
           <a class="dropdown-item"
-            href="https://nbviewer.jupyter.org/github/luponzo86/rhapsody-tutorials/tree/master/tutorials"
+            href="https://nbviewer.jupyter.org/github/prody/rhapsody-tutorials/tree/master/tutorials"
             target="_blank">
             Tutorials
           </a>

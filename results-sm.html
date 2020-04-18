@@ -21,10 +21,13 @@
     <div class="col-sm"></div>
     <div class="col-sm-8 py-2">
       <div class="alert alert-danger" style="display: {{div_status}};">
-        More than 50% of residues could not be mapped to any PDB
-        structure. Please consider submitting a new job by providing a custom
+        <strong>Warning:</strong>
+        {{perc_noPDB}}% of residues could not be mapped to any PDB
+        structure.
+
+        <small>Please consider submitting a new job by providing a custom
         PDB structure, e.g. from a homologous sequence or a homology model.
-        {{faq_link_noPDB}}
+        {{faq_link_noPDB}}</small>
       </div>
     </div>
     <div class="col-sm"></div>

@@ -69,7 +69,7 @@ if ( $subm_type == 'sm' ) {
                    "AREA_DATA = Object.assign({}, AREA_DATA, single_map); \n";
   }
   // find fraction of SAVs with missing PDB structures
-  $fract_noPDB = 0;
+  $percentage_noPDB = 0;
   $searchthis = " have been mapped to PDB in ";
   $handle = @fopen("${jobdir}/rhapsody-log.txt", "r");
   if ($handle) {
@@ -77,12 +77,13 @@ if ( $subm_type == 'sm' ) {
       $buffer = fgets($handle);
       if(strpos($buffer, $searchthis) !== FALSE) {
         $words = explode(" ", trim($buffer));
-        $fract_noPDB = $words[0] / $words[3];
+        $percentage_noPDB = (1 - $words[0]/$words[3])*100;
+        $percentage_noPDB = round($percentage_noPDB, 0);
       }
     }
     fclose($handle);
   }
-  if ($fract_noPDB < .5) {
+  if ($percentage_noPDB > 50) {
     # show alert
     $div_status = "inline-block";
   }
@@ -93,6 +94,7 @@ if ( $subm_type == 'sm' ) {
   $arr += [
     "Uniprot_acc"     => $Uniprot_acc,
     "div_status"      => $div_status,
+    "perc_noPDB"      => $percentage_noPDB,
     "images"          => $html_snippet,
     "lookup_tables"   => $js_snippet,
     "faq_link_legend" => faq_link('legend', 'more info...', false),

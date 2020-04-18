@@ -24,7 +24,9 @@ function returnStatus($status="") {
   $logFile = 'rhapsody-log.txt';
   $statusFile = 'rhapsody-status.txt';
   if ( file_exists($logFile) ) {
-    $logTail = tailShell($logFile, 5);
+    // number of lines below must be at least 2 less than 
+    // n. of rows in status.php
+    $logTail = tailShell($logFile, 7);
     if ( file_exists($statusFile) ) {
       $logTail .= "\r\n\r\n" . tailShell($statusFile, 1);
     }

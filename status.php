@@ -56,7 +56,9 @@ $jobdir = $arr["jobdir"];
           </small></p>
         </div>
         <div id="logdiv">
-          <textarea class="form-control" id="log_update" cols="100" rows="7" readonly
+	  <!-- number of 'rows' below must be at least 2 + number of lines in tailShell() 
+               call in src/php/get_status.php:returnStatus()  -->
+          <textarea class="form-control" id="log_update" cols="100" rows="9" readonly
                     style="font-family:monospace; font-size:12px; white-space:pre-wrap">
             ...
           </textarea>

@@ -35,8 +35,16 @@ if ( $subm_type == 'sat_mutagen' ) {
   $back_link = 'sat_mutagen.php';
   // check input data
   $query = str_replace(array(" ", "\n", "\r"), '', $_POST["sm_query"]);
-  if ( empty($query) || $query=="test" )
-    $subm_type = "example-sm";
+  if ( empty($query) || $query=="test" ) {
+    // check if custom PDB is provided
+    if ( isset($_POST["customPDB_checkbox"]) ) {
+      // interpret empty query field as "P01112"
+      $_POST["sm_query"] = "P01112";
+    }
+    else {
+      $subm_type = "example-sm";
+    }
+  }
   else {
     $parsed_query = explode(" ", trim($_POST["sm_query"]));
     if (sizeof($parsed_query) > 2) {

@@ -38,8 +38,11 @@ if ( $subm_type == 'sat_mutagen' ) {
   if ( empty($query) || $query=="test" ) {
     // check if custom PDB is provided
     if ( isset($_POST["customPDB_checkbox"]) ) {
-      // interpret empty query field as "P01112"
-      $_POST["sm_query"] = "P01112";
+      // complain if query is empty
+      $errors[] = '"Uniprot ID" field is empty. Please make sure to ' .
+        'indicate a sequence that is sufficiently similar to the amino acid ' .
+        'sequence in the PDB structure, since only matching amino acids ' .
+        'will be analyzed.';
     }
     else {
       $subm_type = "example-sm";

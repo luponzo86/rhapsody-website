@@ -39,10 +39,11 @@ if ( $subm_type == 'sat_mutagen' ) {
     // check if custom PDB is provided
     if ( isset($_POST["customPDB_checkbox"]) ) {
       // complain if query is empty
-      $errors[] = '"Uniprot ID" field is empty. Please make sure to ' .
-        'indicate a sequence that is sufficiently similar to the amino acid ' .
-        'sequence in the PDB structure, since only matching amino acids ' .
-        'will be analyzed.';
+      $errors[] =
+'"Uniprot ID" field is empty.
+Please make sure to indicate a sequence that is sufficiently similar
+to the amino acid sequence in the PDB structure, since only matching
+amino acids will be analyzed.';
     }
     else {
       $subm_type = "example-sm";
@@ -51,9 +52,9 @@ if ( $subm_type == 'sat_mutagen' ) {
   else {
     $parsed_query = explode(" ", trim($_POST["sm_query"]));
     if (sizeof($parsed_query) > 2) {
-      $errors[] = 'Query must be a single Uniprot identifier (e.g. ' .
-        '"P01112") or a Uniprot ID plus a specific position on the ' .
-        'sequence (e.g. "P01112 100").';
+      $errors[] =
+'Query must be a single Uniprot identifier (e.g. "P01112") or a
+Uniprot ID plus a specific position on the sequence (e.g. "P01112 100").';
     }
     if (!ctype_alnum($query))
     $errors[] = 'Query must contain letters, numbers and spaces only.';

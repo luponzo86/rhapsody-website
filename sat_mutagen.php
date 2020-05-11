@@ -40,12 +40,12 @@ include 'src/php/utils.php';
       placeholder="P01112" value="">
       <small id="jobIDHelp" class="form-text text-muted">type the
         <a href="query_Uniprot.php" target='_blank'>Uniprot accession number</a>
-        of a human sequence
-        <?php faq_link('whyhuman', 'why only from human?')?>
+        of a human sequence <?php faq_link('whyhuman',
+        'only human sequences are accepted (click for more info...)')?>
         or leave blank to run test case. <br>
         optional: add a specific position for single-site scanning, e.g.
         &nbsp;<code>P01112 100</code>&nbsp;
-        <?php faq_link('formats', 'info on input format') ?>
+        <?php faq_link('formats', 'click for more info on accepted formats...') ?>
       </small>
       <div class="invalid-feedback">
         Invalid query
@@ -76,6 +76,26 @@ include 'src/php/utils.php';
 <!-- collapsable row with radio buttons for typing/uploading PDB -->
 <div class="panel-collapse collapse" id="collapse1">
 
+  <!-- "Rhapsody+EVmutation" classifier checkbox -->
+  <div class="form-row">
+    <div class="col-md"></div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input"
+          name="EVmutation_checkbox" id="EVmutation_checkbox" autocomplete="off">
+          <label class="custom-control-label" for="EVmutation_checkbox">
+            include EVmutation feature
+            <?php faq_link('EVmutation',
+            'check to use &ldquo;full+EVmutation&rdquo; classifier for ' .
+            'predictions (click for more info...)') ?>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md"></div>
+  </div>
+
   <!-- "use custom PDB structure" checkbox -->
   <div class="form-row">
     <div class="col-md"></div>
@@ -87,7 +107,9 @@ include 'src/php/utils.php';
           onchange="document.getElementById('radios').disabled = !this.checked;">
           <label class="custom-control-label" for="customPDB_checkbox">
             use custom PDB structure
-            <?php faq_link('noPDB', 'when could it be useful?') ?>
+            <?php faq_link('noPDB', 'check and provide a PDB ID or PDB file '.
+            'to run predictions on a specific protein structure or '.
+            'conformation (click for more info...)') ?>
           </label>
         </div>
       </div>
@@ -129,6 +151,24 @@ include 'src/php/utils.php';
           id="customPDBFile" autocomplete="off"
           onfocus="document.getElementById('customPDBfile_radio').checked=true">
         </div>
+      </div>
+    </div>
+    <div class="col-md"></div>
+  </div>
+
+  <!-- environment yes/no -->
+  <div class="form-row pb-4">
+    <div class="col-md"></div>
+    <div class="col-md-6">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input"
+        name="environment_checkbox" id="environment_checkbox" autocomplete="off">
+        <label class="custom-control-label" for="environment_checkbox">
+          <small>include "environmental effects"</small>
+          <?php faq_link('environment', 'check to include the effect of the '.
+          'presence of other chains in the PDB structure (click for '.
+          'more info...)') ?>
+        </label>
       </div>
     </div>
     <div class="col-md"></div>

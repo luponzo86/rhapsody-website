@@ -7,6 +7,20 @@ FIGURE_MAX_WIDTH = 100
 
 # define Rhapsody keyword arguments
 kwargs = {}
+# read configuration file
+config = {}
+with open('config.txt', 'r') as f:
+    for line in f:
+        key, value = line.split(':')
+        config[key.strip()] = value.strip()
+# use full+EVmutation classifier?
+if config.get('include EVmutation feature') == 'True':
+    kwargs['main_classifier'] = rd.getDefaultClassifiers()['EVmut']
+    kwargs['aux_classifier'] = rd.getDefaultClassifiers()['reduced']
+# use sliced ANM?
+if config.get('include environmental effects') == 'True':
+    kwargs['force_env'] = 'sliced'
+# others...
 for i, step in enumerate(['Uniprot', 'PDB', 'Pfam']):
     kwargs[f'status_file_{step}'] = f'rhapsody-status.txt'
     kwargs[f'status_prefix_{step}'] = f'STEP {i+1}: '

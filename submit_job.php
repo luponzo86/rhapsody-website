@@ -35,15 +35,20 @@ if ( $subm_type == 'sat_mutagen' ) {
   $back_link = 'sat_mutagen.php';
   // check input data
   $query = str_replace(array(" ", "\n", "\r"), '', $_POST["sm_query"]);
-  if ( empty($query) || $query=="test" ) {
-    // check if custom PDB is provided
+  // allow empty query only on default options
+  if ( empty($query) ) {
     if ( isset($_POST["customPDB_checkbox"]) ) {
-      // complain if query is empty
       $errors[] =
 '"Uniprot ID" field is empty.
-Please make sure to indicate a sequence that is sufficiently similar
-to the amino acid sequence in the PDB structure, since only matching
-amino acids will be analyzed.';
+When assigning a custom PDB structure, please make sure that the Uniprot
+sequence is sufficiently similar to the amino acid sequence in the PDB,
+since only matching amino acids will be analyzed.';
+    }
+    else if ( isset($_POST["EVmutation_checkbox"]) ||
+              isset($_POST["environment_checkbox"]) ) {
+      $errors[] =
+'"Uniprot ID" field is empty.
+Advanced options cannot be selected when running test cases.';
     }
     else {
       $subm_type = "example-sm";
@@ -86,13 +91,24 @@ elseif ( $subm_type == 'batch_query' ) {
   if ( $radio_value == "bq_text" ) {
     $text = $_POST["bq_text"];
     $text = str_replace(array(" ", "_", "\n", "\r"), '', $text);
-    if ( empty($text) || $text=="test" )
-      $subm_type = "example-bq";
-    elseif ( !ctype_alnum($text) )
+    if ( empty($text) ) {
+      // allow empty query only on default options
+      if ( isset($_POST["EVmutation_checkbox"]) ) {
+        $errors[] =
+'"Uniprot ID" field is empty.
+Advanced options cannot be selected when running test cases.';
+      }
+      else {
+        $subm_type = "example-bq";
+      }
+    }
+    elseif ( !ctype_alnum($text) ) {
       $errors[] = 'SAV coordinates can only contain ' .
                   'alphanumeric characters and underscores.';
-    elseif ( strlen($text) > 500 )
+    }
+    elseif ( strlen($text) > 500 ) {
       $errors[] = 'input text is too long.';
+    }
   }
   else if ( $radio_value == "bq_file" ) {
     if ( $_FILES["bq_file"]["size"] == 0 )
@@ -154,13 +170,16 @@ mkdir($jobdir);
 chdir($jobdir);
 
 if ( $subm_type == 'sat_mutagen' ) {
+  $config = "submission type: saturation mutagenesis \n";
   save2file("input-sm_query.txt", $_POST["sm_query"]);
   if ( isset($_POST["customPDB_checkbox"]) ) {
     $radio_value = $_POST["customPDB_radios"];
     if ( $radio_value == "PDBID") {
+      $config .= "custom PDB: PDBID \n";
       save2file("input-PDBID.txt", $_POST["customPDBID"]);
     }
     else {
+      $config .= "custom PDB: PDB file \n";
       $orig_fname = $_FILES["customPDBFile"]["name"];
       $temp_fname = $_FILES["customPDBFile"]["tmp_name"];
       if ( endsWith($orig_fname, ".pdb") )
@@ -175,8 +194,24 @@ if ( $subm_type == 'sat_mutagen' ) {
       }
     }
   }
+  else {
+    $config .= "custom PDB: None \n";
+  }
+  if ( isset($_POST["EVmutation_checkbox"]) ) {
+    $config .= "include EVmutation feature: True \n";
+  }
+  else {
+    $config .= "include EVmutation feature: False \n";
+  }
+  if ( isset($_POST["environment_checkbox"]) ) {
+    $config .= "include environmental effects: True \n";
+  }
+  else {
+    $config .= "include environmental effects: False \n";
+  }
 }
 elseif ( $subm_type == 'batch_query' ) {
+  $config = "submission type: batch query \n";
   $radio_value = $_POST["bq_radios"];
   if ( $radio_value == "bq_text" ) {
     save2file("input-batch_query.txt", $_POST["bq_text"]);
@@ -190,6 +225,12 @@ elseif ( $subm_type == 'batch_query' ) {
       redirect("error.php", $arr);
     }
   }
+  if ( isset($_POST["environment_checkbox"]) ) {
+    $config .= "include environmental effects: True \n";
+  }
+  else {
+    $config .= "include environmental effects: False \n";
+  }
 }
 elseif ( substr($subm_type, 0, 8) == "example-") {
   // try to reuse PolyPhen-2 files
@@ -201,10 +242,15 @@ elseif ( substr($subm_type, 0, 8) == "example-") {
   if ( $subm_type == "example-sm" ) {
     $test_query = "P01112";
     save2file("input-sm_query.txt", $test_query);
+    $config = "submission type: saturation mutagenesis \n" .
+    "include EVmutation feature: False \n" .
+    "include environmental effects: False \n";
   }
   elseif ( $subm_type == "example-bq" ) {
     $test_query = "P01112 99 Q R\nEGFR_HUMAN 300 V A\n";
     save2file("input-batch_query.txt", $test_query);
+    $config = "submission type: batch query \n" .
+    "include EVmutation feature: False \n";
   }
 }
 else {
@@ -214,7 +260,10 @@ else {
   redirect("error.php", $arr);
 }
 
+// print configuration file
+save2file("config.txt", $config);
 
+// print email to file
 if (! empty($_POST["email"]) ) {
   save2file("input-email.txt", $_POST["email"]);
 }

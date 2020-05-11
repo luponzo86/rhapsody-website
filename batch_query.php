@@ -49,7 +49,7 @@ EGFR_HUMAN 300 V A
         <small id="bq_text" class="form-text text-muted">
           type <a href="query_Uniprot.php" target='_blank'>Uniprot coordinates</a>
           or leave blank to run test case
-          <?php faq_link('formats', 'more info...') ?>
+          <?php faq_link('formats', 'click for more info on accepted formats...') ?>
         </small>
       </div>
     </div>
@@ -71,6 +71,50 @@ EGFR_HUMAN 300 V A
 
   <div class="col-md"></div>
 </div>
+
+
+<!-- row with checkbox for opening collapsable row below -->
+<div class="form-row">
+  <div class="col-md"></div>
+
+  <div class="col-md-6">
+    <div class="form-group">
+      <button type="button" class="btn btn-outline-info btn-sm"
+        data-toggle="collapse" data-target="#collapse1"
+        aria-expanded="false" aria-controls="collapse1">
+        advanced settings
+      </button>
+    </div>
+  </div>
+
+  <div class="col-md"></div>
+</div>
+
+<!-- collapsable row with radio buttons for typing/uploading PDB -->
+<div class="panel-collapse collapse" id="collapse1">
+
+  <!-- "Rhapsody+EVmutation" classifier checkbox -->
+  <div class="form-row">
+    <div class="col-md"></div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input"
+          name="EVmutation_checkbox" id="EVmutation_checkbox" autocomplete="off">
+          <label class="custom-control-label" for="EVmutation_checkbox">
+            include EVmutation feature
+            <?php faq_link('EVmutation',
+            'check to use &ldquo;full+EVmutation&rdquo; classifier for ' .
+            'predictions (click for more info...)') ?>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md"></div>
+  </div>
+
+</div> <!-- end of collapsable -->
+
 
 
 <!-- row for email -->

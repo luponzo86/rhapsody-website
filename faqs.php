@@ -117,7 +117,8 @@ include 'src/php/utils.php';
 <li id="FAQ-environment">
   <h5>What does it mean to include "environmental effects"?</h5>
   <p><small>When computing structural and dynamical features from a PDB
-  structure, by default Rhapsody will only consider a single chain and ignore
+  structure, by default Rhapsody will only consider a single chain (the one with 
+  higher sequence similarity with the given Uniprot sequence) and ignore
   other chains that might be present in the PDB file. Sometimes, for instance
   in the case of multimers or other complexes, the presence of other chains
   should not be ignored and those properties should be computed for the entire
@@ -127,8 +128,8 @@ include 'src/php/utils.php';
   ROMK tutorial</a>). In conclusion, environmental effects should be
   included if the chain of interest is part of a "stable" complex (e.g. a
   multimer) and as such its dynamical properties are influenced and determined
-  by the presence of other chains. On the other hand, computing predictions on
-  large complexes will take a significantly longer time.
+  by the presence of other chains. On the other hand, please be aware that 
+  computing predictions on large complexes will take a significantly longer time.
   </small></p>
 </li>
 <li id="FAQ-legend">

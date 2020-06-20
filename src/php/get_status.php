@@ -20,11 +20,19 @@ function tailShell($filepath, $lines = 10) {
   return trim(ob_get_clean());
 }
 
-function returnStatus($status="") {
+function catShell($filepath) {
+  ob_start();
+  passthru('cat ' . escapeshellarg($filepath));
+  return trim(ob_get_clean());
+}
+
+function returnStatus($status) {
   $logFile = 'rhapsody-log.txt';
   $statusFile = 'rhapsody-status.txt';
+  $pph2File = 'pph2-log.txt';
+  $pph2Log = "";
   if ( file_exists($logFile) ) {
-    // number of lines below must be at least 2 less than 
+    // number of lines below must be at least 2 less than
     // n. of rows in status.php
     $logTail = tailShell($logFile, 7);
     if ( file_exists($statusFile) ) {
@@ -34,7 +42,18 @@ function returnStatus($status="") {
   else {
     $logTail = "";
   }
-  $arr = array('status' => $status, 'logTail' => $logTail);
+  if ( $status == 'aborted' && file_exists($pph2File) ) {
+    # read PolyPhen-2 log if 'pph2-log.txt' is mentioned in the log
+    if (strpos($logTail, 'pph2-log.txt') !== false) {
+      $pph2Log = catShell($pph2File);
+
+    }
+  }
+  $arr = array(
+    'status' => $status,
+    'logTail' => $logTail,
+    'pph2Log' => $pph2Log,
+  );
   die( json_encode($arr) );
 }
 
@@ -50,15 +69,15 @@ $jobdir = $arr["jobdir"];
 chdir($jobdir);
 
 if ( isProcessRunning($pidFile) ) {
-  returnStatus( 'running...' );
+  returnStatus('running...');
 }
 else {
   exec("rm -f $pidFile");
-  if ( file_exists($doneFile) ) {
-    returnStatus( 'completed' );
+  if ( file_exists($doneFile)) {
+    returnStatus('completed');
   }
   else {
-    returnStatus( 'aborted' );
+    returnStatus('aborted');
   }
 }
 

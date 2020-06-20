@@ -44,8 +44,7 @@ $jobdir = $arr["jobdir"];
         <div id="errordiv" style="display:none">
           <p><small class="text-muted">
             please check error message below and
-            <a href="<?php echo $jobdir;?>" target='_blank'>output folder</a>.
-            Contact us for assistance (see footer).
+            <a href="<?php echo $jobdir;?>" target='_blank'>output folder</a>:
           </small></p>
         </div>
         <div id="resultsdiv" style="display:none">
@@ -56,12 +55,22 @@ $jobdir = $arr["jobdir"];
           </small></p>
         </div>
         <div id="logdiv">
-	  <!-- number of 'rows' below must be at least 2 + number of lines in tailShell() 
+	        <!-- number of 'rows' below must be at least 2 + number of lines in tailShell()
                call in src/php/get_status.php:returnStatus()  -->
-          <textarea class="form-control" id="log_update" cols="100" rows="9" readonly
-                    style="font-family:monospace; font-size:12px; white-space:pre-wrap">
+          <p><textarea class="form-control" id="log_update" cols="100" rows="9" readonly
+            style="font-family:monospace; font-size:12px; white-space:pre-wrap">
             ...
-          </textarea>
+          </textarea></p>
+        </div>
+        <div id="errordiv-pph2" style="display:none">
+          <p><small class="text-muted">
+            error message from PolyPhen-2 (file
+            <a href="<?php echo $jobdir;?>/pph2-log.txt">pph2-log.txt</a>):
+          </small></p>
+          <p><textarea class="form-control" id="pph2log_div" cols="100" rows="9" readonly
+            style="font-family:monospace; font-size:12px; white-space:pre-wrap">
+            ...
+          </textarea></p>
         </div>
       </div>
     </div>
@@ -85,6 +94,7 @@ $jobdir = $arr["jobdir"];
       $.get( "src/php/get_status.php?id=" + jobid , function(data, status){
         job_status = data.status;
         log_tail   = data.logTail;
+        pph2Log    = data.pph2Log;
       }, "json");
 
       $("#status_update").html(job_status);
@@ -104,6 +114,10 @@ $jobdir = $arr["jobdir"];
       else {
         $("#infodiv").hide();
         $("#errordiv").show();
+        if (pph2Log != "") {
+          $("#pph2log_div").html(pph2Log);
+          $("#errordiv-pph2").show();
+        }
       }
     }
 
